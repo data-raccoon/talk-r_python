@@ -1,0 +1,81 @@
+---
+title: "Erfahrungen mit R und Übertragbarkeit auf Python"
+author: "Stephan Porz"
+date: "February 29, 2016"
+output: 
+  beamer_presentation:
+    toc: TRUE
+    theme: "Frankfurt"
+    colortheme: "crane"
+    latex_engine: "xelatex"
+    includes:
+      in_header: in_header.tex
+---
+
+# Section 1
+
+## Teststuff
+
+- bullet
+
+### More test
+- bullet
+
+## Rstudio, Spyder
+
+- Demo Rstudio
+- Demo Spyder
+
+## R Markdown
+
+- This document
+
+# Section 2
+
+## dplyr pipe
+
+```{r, echo=FALSE, eval=FALSE}
+data2 <- data %>% 
+    filter(column1 == "A") %>%
+    group_by(column2) %>%
+    summarize(column3 = sum(column3))
+```
+
+## dplyr sql
+
+```{r, echo=FALSE, eval=FALSE}
+query <- . %>%
+    filter(column1 == "A") %>%
+    group_by(column2) %>%
+    summarize(column3 = sum(column3))
+
+con <- src_postgres("db_name", "host_name", 1234, "user_name")
+con %>% tbl("table_name") %>% query %>% explain
+con %>% tbl("table_name") %>% query %>% collect
+```
+
+## Shiny apps
+
+- Demo
+
+# Section 3
+
+## Slide with Python
+
+```{r, engine='python'}
+x = 'hello, python world!'
+print(x)
+```
+
+## Literature
+
+### R markdown for presentations
+
+- http://rmarkdown.rstudio.com/beamer_presentation_format.html
+- https://cran.r-project.org/web/packages/rmarkdown/rmarkdown.pdf
+- https://github.com/yihui/knitr-examples/blob/master/023-engine-python.Rmd
+- https://www.hartwork.org/beamer-theme-matrix/
+
+
+
+
