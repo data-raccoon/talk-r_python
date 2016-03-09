@@ -4,7 +4,7 @@ author: "Stephan Porz"
 date: "February 29, 2016"
 output: 
   beamer_presentation:
-    toc: TRUE
+    toc: FALSE
     theme: "Frankfurt"
     colortheme: "crane"
     latex_engine: "xelatex"
@@ -12,64 +12,158 @@ output:
       in_header: in_header.tex
 ---
 
-# Section 1
+# Motivation
 
-## Teststuff
+## Warum eigentlich R? 
 
-- bullet
+Data Science 
 
-### More test
-- bullet
+ - Python in (medizinischer) Zeitreihenanalyse
+ - Statistische Analysen mit R bei Adblockplus.org
 
-## Rstudio, Spyder
+Umgewöhnung: R und Python sind sehr verschieden
 
-- Demo Rstudio
-- Demo Spyder
+ - R funktionale Programmiersprache
+ - scoping
+ - lazy evaluation
+ - non standard evaluation
 
-## R Markdown
 
-- This document
+# Workflow
 
-# Section 2
+## Entwicklungsumgebung
 
-## dplyr pipe
+Rstudio und Spyder
 
-```{r, echo=FALSE, eval=FALSE}
+ - Quellcode sofort testen
+ - Exploratives arbeiten
+
+Webbasierte Entwicklung
+
+ - Rstudio server
+ - Jupyter Notebooks mit Python oder R kernel
+
+Veröffentlichung
+
+ - Jupyter Notebooks
+ - Webanwendung
+ - R Markdown Dokumente
+    - können auch Python
+
+# Quellcode
+
+## Lesbarkeit - Pipe Operator
+
+R Paktete magrittr & dplyr
+
+```{r, eval=FALSE}
+numbers %>% sum
+mystr %>% strplit(split = " ")
+```
+
+<!--
+mydelimiter %>% strsplit(mystr, .)
+mydelimiter %>% strsplit(x = mystr, split = .)
+-->
+
+```{r, eval=FALSE}
 data2 <- data %>% 
     filter(column1 == "A") %>%
     group_by(column2) %>%
     summarize(column3 = sum(column3))
 ```
 
-## dplyr sql
+Python
 
-```{r, echo=FALSE, eval=FALSE}
+ - pandas df.pipe() (v0.16.2)
+ - macropy
+ - PyToolz
+
+
+## Lesbarkeit - non standard evaluation
+
+R nutzt den Quellcode kreativ
+
+```{r, eval=FALSE}
+library("dplyr")
+library(dplyr)
+```
+
+```{r, eval=FALSE}
+plot(x, sin(x))
+```
+
+```{r, eval=FALSE}
+data2 <- data %>% 
+    filter(column1 == "A") %>%
+    group_by(column2) %>%
+    summarize(column3 = sum(column3))
+```
+
+ - Für die meisten Funktionen standard
+ - Syntax wird schlecht lesbar bei dynamischem Input
+
+
+## Gleicher Syntax bei verschiedenen Datenquellen
+
+R Pakete dplyr und RPostgreSQL
+
+```{r, eval=FALSE}
+library(dplyr)
+library(RPostgreSQL)
+
+con <- src_postgres("db_name", "host_name", 1234, "user_name")
 query <- . %>%
     filter(column1 == "A") %>%
     group_by(column2) %>%
     summarize(column3 = sum(column3))
 
-con <- src_postgres("db_name", "host_name", 1234, "user_name")
-con %>% tbl("table_name") %>% query %>% explain
 con %>% tbl("table_name") %>% query %>% collect
+data %>% query
 ```
 
-## Shiny apps
 
-- Demo
+## Grafikerstellung
 
-# Section 3
+ - ggplot
+ - Buch: Grammar of Graphics
 
-## Slide with Python
+```{r, eval=FALSE}
+library(ggplot2)
 
-```{r, engine='python'}
-x = 'hello, python world!'
-print(x)
+ggplot(data) + 
+    aes(x = date, y = n, color = user) + 
+    geom_line() +
+    ylab("Anzahl wöchentlicher Commits") +
+    scale_y_log10()
 ```
 
-## Literature
+ - matplotlib
+ - web-frameworks: d3.js, bokeh
+ - ggplot
 
-### R markdown for presentations
+
+# Erweitert
+
+## Browser based applications
+
+ - Shiny apps in R
+ - Pyxley
+
+weitere
+
+ - Spyre
+ - Bokeh
+ - IpyWidgets
+
+
+## Literatur und weiterführende Links
+
+General
+
+ - https://m.reddit.com/r/Python/comments/2tkkxd/
+
+R markdown for presentations
 
 - http://rmarkdown.rstudio.com/beamer_presentation_format.html
 - https://cran.r-project.org/web/packages/rmarkdown/rmarkdown.pdf
@@ -77,5 +171,66 @@ print(x)
 - https://www.hartwork.org/beamer-theme-matrix/
 
 
+## Literatur und weiterführende Links
+
+pipes
+
+ - http://stackoverflow.com/quesion/28252585/
+ - http://github.com/lihaoyi/macropy
+ - http://toolz.readthedocs.org/en/latest/
+
+ggplot
+
+ - http://ggplot.yhathq.com
+
+R in Python (mit Pandas integration)
+
+ - http://rpy2.bitbucket.org
 
 
+## Literatur und weiterführende Links
+
+Web applications
+
+ - http://shiny.rstudio.com/gallery
+ - https://github.com/stichfix/pyxley
+ - http://multithreaded.stichfix.com/blog/2015/07/16/pyxley
+ - https://github.com/adamhajari/spyre 
+
+<!--
+Statistik (alternative zu pyMC)
+
+ - https://github.com/stan-dev/pystan
+ - https://pystan.readthedocs.org
+-->
+
+<!--
+## Pakete
+
+ - rworldmap
+ - logging, inspired by python logging
+
+## Worst practice
+
+ - standard import clutters namespace
+
+```{r, eval = FALSE}
+library(dplyr)
+```
+
+```{r, engine = 'python', eval = FALSE}
+from numpy import *
+```
+
+ - solutions?
+
+```{r, eval = FALSE}
+dplyr::filter  # usable without any import
+```
+
+ - check availability at start of document
+
+```{r, eval = FALSE}
+filter <- dplyr::filter  # somewhat cumbersome
+```
+-->
